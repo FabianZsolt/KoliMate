@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoliMate", "KoliMate\KoliMate.csproj", "{8EFBB49C-820B-4CC7-9DC6-FD6B1D53C94E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EFBB49C-820B-4CC7-9DC6-FD6B1D53C94E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EFBB49C-820B-4CC7-9DC6-FD6B1D53C94E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EFBB49C-820B-4CC7-9DC6-FD6B1D53C94E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EFBB49C-820B-4CC7-9DC6-FD6B1D53C94E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD33B703-4937-4545-9C13-C9FE51071064}
+	EndGlobalSection
+EndGlobal
