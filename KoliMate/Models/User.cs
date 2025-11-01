@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using SQLite;
 using System;
 
-namespace KoliMate.App.Models
+namespace KoliMate.Models
 {
     public class User
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string Name { get; set; }     // pl. "Papp Gabor"
+        public string Name { get; set; }     
         public int Age { get; set; }
         public string Description { get; set; }
         public string PhotoPath { get; set; } // lokalis fajlpath
-        public string NeptunHash { get; set; } // ha regisztracio Neptun kod alapjan
+        public string NeptunCode { get; set; } // ha regisztracio Neptun kod alapjan
+        public string Password { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -4,49 +4,69 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace KoliMate.App.Models
+namespace KoliMate.Models
 {
-    public class SqliteDatabaseService
+    public interface IDatabaseService
     {
-        private readonly SQLiteAsyncConnection _database;
+        Task InitAsync();
+        Task<List<User>> GetUsersAsync();
+        Task<User> GetUserAsync(string neptun);
+        Task<int> SaveUserAsync(User user);
+        Task<int> DeleteUserAsync(User user);
+
+        Task<List<RightSwipe>> GetRightSwipesAsync();
+        Task<int> SaveRightSwipeAsync(RightSwipe swipe);
+        Task<int> UpdateRightSwipeAsync(RightSwipe swipe);
+    }
+    public class SqliteDatabaseService : IDatabaseService
+    {
+        SQLite.SQLiteOpenFlags Flags =
+            SQLite.SQLiteOpenFlags.ReadWrite |
+            SQLite.SQLiteOpenFlags.Create;
+
+        private readonly SQLiteAsyncConnection database;
+        string dbPath = Path.Combine(FileSystem.Current.AppDataDirectory, "kolimate.db3");
+
 
         public SqliteDatabaseService()
         {
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "kolimate.db3");
-            _database = new SQLiteAsyncConnection(dbPath);
+            database = new SQLiteAsyncConnection(dbPath, Flags);
+            database.CreateTableAsync<User>().Wait();
         }
 
         public async Task InitAsync()
         {
-            await _database.CreateTableAsync<User>();
-            await _database.CreateTableAsync<RightSwipe>();
+            await database.CreateTableAsync<User>();
+            await database.CreateTableAsync<RightSwipe>();
             // seed dummy data ha ures a tabla
-            var users = await _database.Table<User>().ToListAsync();
+            var users = await database.Table<User>().ToListAsync();
             if (users.Count == 0)
             {
-                await _database.InsertAsync(new User { Name = "Anna", Age = 22, Description = "Student", PhotoPath = "" });
-                await _database.InsertAsync(new User { Name = "Peter", Age = 25, Description = "Engineer", PhotoPath = "" });
+                await database.InsertAsync(new User { Name = "Anna", Age = 20, Description = "Student", PhotoPath = "", NeptunCode = "ABC123"});
+                await database.InsertAsync(new User { Name = "Zsolt", Age = 22, Description = "Engineer", PhotoPath = "", NeptunCode = "XMHZDW" });
             }
         }
 
-        public Task<List<User>> GetUsersAsync() => _database.Table<User>().ToListAsync();
+        public async Task<List<User>> GetUsersAsync() => await database.Table<User>().ToListAsync();
 
-        public Task<User> GetUserAsync(int id) => _database.Table<User>().Where(u => u.Id == id).FirstOrDefaultAsync();
+        public async Task<User> GetUserAsync(string neptun) => await database.Table<User>().Where(u => u.NeptunCode == neptun).FirstOrDefaultAsync();
 
-        public Task<int> SaveUserAsync(User user)
+        public async Task<int> SaveUserAsync(User user)
         {
             if (user.Id != 0)
-                return _database.UpdateAsync(user);
+                return await database.UpdateAsync(user);
             else
-                return _database.InsertAsync(user);
+                return await database.InsertAsync(user);
         }
 
-        public Task<int> DeleteUserAsync(User user) => _database.DeleteAsync(user);
+        public async Task<int> DeleteUserAsync(User user) => await database.DeleteAsync(user);
 
-        public Task<List<RightSwipe>> GetRightSwipesAsync() => _database.Table<RightSwipe>().ToListAsync();
+        public async Task<List<RightSwipe>> GetRightSwipesAsync() => await database.Table<RightSwipe>().ToListAsync();
 
-        public Task<int> SaveRightSwipeAsync(RightSwipe swipe) => _database.InsertAsync(swipe);
+        public async Task<int> SaveRightSwipeAsync(RightSwipe swipe) => await database.InsertAsync(swipe);
 
-        public Task<int> UpdateRightSwipeAsync(RightSwipe swipe) => _database.UpdateAsync(swipe);
+        public async Task<int> UpdateRightSwipeAsync(RightSwipe swipe) => await database.UpdateAsync(swipe);
+
+
     }
 }

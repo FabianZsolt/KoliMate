@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SQLite;
 using System;
 
-namespace KoliMate.App.Models
+namespace KoliMate.Models
 {
     public class RightSwipe
     {

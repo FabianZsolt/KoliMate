@@ -1,10 +1,10 @@
-﻿namespace KoliMate
+﻿namespace KoliMate.Views
 {
-    public partial class MainPage : ContentPage
+    public partial class SwipePage : ContentPage
     {
         int count = 0;
 
-        public MainPage()
+        public SwipePage()
         {
             InitializeComponent();
         }
@@ -14,9 +14,9 @@
             count++;
 
             if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+                CounterBtn.Text = $"Kattintások száma: {count}";
             else
-                CounterBtn.Text = $"Clicked {count} times";
+                CounterBtn.Text = $"Kattintások száma: {count}";
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }

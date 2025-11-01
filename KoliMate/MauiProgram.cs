@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using KoliMate.Views;
+using KoliMate.Models;
 
 namespace KoliMate
 {
@@ -15,11 +17,12 @@ namespace KoliMate
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
-
+            //builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<SwipePage>();
+            builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
             return builder.Build();
+
+
         }
     }
 }

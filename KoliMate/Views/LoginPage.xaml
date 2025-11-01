@@ -1,0 +1,23 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoliMate.Pages.LoginPage"
+             Title="Bejelentkezés">
+    <VerticalStackLayout Padding="30" Spacing="20">
+        <Label Text="Neptun-kód:" FontSize="18"/>
+        <Entry x:Name="NeptunEntry" Placeholder="pl. XMHZDW" />
+
+        <Button x:Name="NextButton"
+                Text="Tovább"
+                Clicked="OnNextClicked"/>
+
+        <!-- Ezeket dinamikusan fogjuk mutatni -->
+        <StackLayout x:Name="PasswordPanel" IsVisible="False">
+            <Label x:Name="PasswordLabel" FontSize="18"/>
+            <Entry x:Name="PasswordEntry" IsPassword="True" Placeholder="Jelszó" />
+            <Entry x:Name="ConfirmEntry" IsPassword="True" Placeholder="Jelszó megerősítése" IsVisible="False" />
+            <Button Text="Belépés / Mentés" Clicked="OnPasswordSubmitClicked"/>
+        </StackLayout>
+
+        <Label x:Name="MessageLabel" TextColor="Red" FontSize="14" />
+    </VerticalStackLayout>
+</ContentPage>
