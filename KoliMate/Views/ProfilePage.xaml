@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="KoliMate.Views.ProfilePage"
              Title="Profile">
 
@@ -8,15 +9,11 @@
     <VerticalStackLayout Padding="20" Spacing="12">
       <Image Source="{Binding CurrentUser.PhotoPath}" HeightRequest="200" Aspect="AspectFill"/>
       <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" Placeholder="Name" />
-      <Entry Text="{Binding CurrentUser.Age, Mode=TwoWay}" Placeholder="Age" Keyboard="Numeric" />
-      <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
       <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" Placeholder="Neptun code" />
-      <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
-      <HorizontalStackLayout VerticalOptions="Center">
-        <Label Text="Active" VerticalOptions="Center" />
-        <Switch IsToggled="{Binding CurrentUser.IsActive, Mode=TwoWay}" />
-      </HorizontalStackLayout>
-      <Button Text="Save" Command="{Binding SaveCommand}" />
+      <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" MaximumDate="{Binding MaxDate}" Format="d" />
+      <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
+            <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
+            <Button Text="Save" Command="{Binding SaveCommand}" />
     </VerticalStackLayout>
   </ScrollView>
 </ContentPage>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
-using System;
 
 namespace KoliMate.Models
 {
@@ -13,7 +12,7 @@ namespace KoliMate.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }     
-        public int Age { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Description { get; set; }
         public string PhotoPath { get; set; } // lokalis fajlpath
         public string NeptunCode { get; set; } // ha regisztracio Neptun kod alapjan

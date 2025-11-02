@@ -29,8 +29,8 @@ namespace KoliMate.Models
             var users = await database.Table<User>().ToListAsync();
             if (users.Count == 0)
             {
-                await database.InsertAsync(new User { Name = "Anna", Age = 20, Description = "Student", PhotoPath = "", NeptunCode = "ABC123"});
-                await database.InsertAsync(new User { Name = "Zsolt", Age = 22, Description = "Mérnökinformatikus", PhotoPath = "", NeptunCode = "XMHZDW" });
+                await database.InsertAsync(new User { Name = "Anna", BirthDate = new DateTime(2004, 5, 6), Description = "Student", PhotoPath = "", NeptunCode = "ABC123"});
+                await database.InsertAsync(new User { Name = "Fábián Zsolt", BirthDate = new DateTime(2003, 07, 14), Description = "Mérnökinformatikus", PhotoPath = "", NeptunCode = "XMHZDW" });
             }
         }
 

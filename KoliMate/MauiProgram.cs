@@ -2,36 +2,44 @@
 using KoliMate.Views;
 using KoliMate.Models;
 using KoliMate.ViewModels;
+using CommunityToolkit.Maui;
+
 
 namespace KoliMate
 {
     public static class MauiProgram
     {
+        public static IServiceProvider Services { get; private set; }
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            //builder.Services.AddSingleton<MainPageViewModel>();
-            builder.Services.AddSingleton<SwipePage>();
+            // Dependency injection
+            builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
+
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<LoginPageViewModel>();
+
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<ProfilePageViewModel>();
-            builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
+
             builder.Services.AddTransient<MatchesPageViewModel>();
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
 
-            return builder.Build();
-
-
+            var app = builder.Build();
+            Services = app.Services;
+            return app;
         }
     }
+
 }
+

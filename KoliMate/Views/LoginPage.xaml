@@ -1,23 +1,26 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KoliMate.ViewModels"
              x:Class="KoliMate.Views.LoginPage"
              Title="Bejelentkezés">
-    <VerticalStackLayout Padding="30" Spacing="20">
-        <Label Text="Neptun-kód:" FontSize="18"/>
-        <Entry x:Name="NeptunEntry" Placeholder="pl. XMHZDW" />
 
-        <Button x:Name="NextButton"
-                Text="Tovább"
-                Clicked="OnNextClicked"/>
+  <VerticalStackLayout Padding="30" Spacing="20">
+    <Label Text="Neptun-kód:" FontSize="18"/>
+    <Entry x:Name="NeptunEntry" Placeholder="pl. ABC123" Text="{Binding NeptunEntryText}" />
 
-        <!-- Ezeket dinamikusan fogjuk mutatni -->
-        <StackLayout x:Name="PasswordPanel" IsVisible="False">
-            <Label x:Name="PasswordLabel" FontSize="18"/>
-            <Entry x:Name="PasswordEntry" IsPassword="True" Placeholder="Jelszó" />
-            <Entry x:Name="ConfirmEntry" IsPassword="True" Placeholder="Jelszó megerősítése" IsVisible="False" />
-            <Button Text="Belépés / Mentés" Clicked="OnPasswordSubmitClicked"/>
-        </StackLayout>
+    <Button x:Name="NextButton"
+            Text="Tovább"
+            Command="{Binding NextButtonCommand}"
+            IsVisible="{Binding NextButtonVisible}"/>
 
-        <Label x:Name="MessageLabel" TextColor="Red" FontSize="14" />
-    </VerticalStackLayout>
+    <!-- Ezeket dinamikusan fogjuk mutatni -->
+    <StackLayout x:Name="PasswordPanel" IsVisible="{Binding PasswordEntryVisible}">
+      <Label x:Name="PasswordLabel" FontSize="18" Text="{Binding PasswordLabel}"/>
+      <Entry x:Name="PasswordEntry" IsPassword="True" Placeholder="Jelszó" Text="{Binding PasswordEntryText}" />
+      <Entry x:Name="ConfirmEntry" IsPassword="True" Placeholder="Jelszó megerősítése" IsVisible="{Binding ConfirmEntryVisible}" Text="{Binding ConfirmEntryText}" />
+      <Button Text="Belépés / Mentés" Command="{Binding PasswordSubmitCommand}"/>
+    </StackLayout>
+
+    <Label x:Name="MessageLabel" TextColor="{Binding MessageTextColor}" FontSize="14" Text="{Binding MessageText}" />
+  </VerticalStackLayout>
 </ContentPage>

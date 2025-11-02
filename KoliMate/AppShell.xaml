@@ -10,20 +10,20 @@
 
     <TabBar>
         <ShellContent 
-            Title="Home"
+            Title="Főoldal"
             ContentTemplate="{DataTemplate view:SwipePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="🔥" />
             </ShellContent.Icon>
         </ShellContent>
 
-        <ShellContent Title="Profile" ContentTemplate="{DataTemplate view:ProfilePage}">
+        <ShellContent Title="Profil" Route="profile" ContentTemplate="{DataTemplate view:ProfilePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="👤" />
             </ShellContent.Icon>
         </ShellContent>
 
-        <ShellContent Title="Matches">
+        <ShellContent Title="Lájkok">
             <ShellContent.Icon>
                 <FontImageSource Glyph="❤" />
             </ShellContent.Icon>
@@ -34,7 +34,7 @@
             </ShellContent.ContentTemplate>
         </ShellContent>
 
-        <ShellContent Title="Map">
+        <ShellContent Title="Térkép">
             <ShellContent.Icon>
                 <FontImageSource Glyph="📍" />
             </ShellContent.Icon>
