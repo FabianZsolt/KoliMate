@@ -6,18 +6,6 @@ using System.Threading.Tasks;
 
 namespace KoliMate.Models
 {
-    public interface IDatabaseService
-    {
-        Task InitAsync();
-        Task<List<User>> GetUsersAsync();
-        Task<User> GetUserAsync(string neptun);
-        Task<int> SaveUserAsync(User user);
-        Task<int> DeleteUserAsync(User user);
-
-        Task<List<RightSwipe>> GetRightSwipesAsync();
-        Task<int> SaveRightSwipeAsync(RightSwipe swipe);
-        Task<int> UpdateRightSwipeAsync(RightSwipe swipe);
-    }
     public class SqliteDatabaseService : IDatabaseService
     {
         SQLite.SQLiteOpenFlags Flags =
@@ -31,7 +19,6 @@ namespace KoliMate.Models
         public SqliteDatabaseService()
         {
             database = new SQLiteAsyncConnection(dbPath, Flags);
-            database.CreateTableAsync<User>().Wait();
         }
 
         public async Task InitAsync()
@@ -43,7 +30,7 @@ namespace KoliMate.Models
             if (users.Count == 0)
             {
                 await database.InsertAsync(new User { Name = "Anna", Age = 20, Description = "Student", PhotoPath = "", NeptunCode = "ABC123"});
-                await database.InsertAsync(new User { Name = "Zsolt", Age = 22, Description = "Engineer", PhotoPath = "", NeptunCode = "XMHZDW" });
+                await database.InsertAsync(new User { Name = "Zsolt", Age = 22, Description = "Mérnökinformatikus", PhotoPath = "", NeptunCode = "XMHZDW" });
             }
         }
 

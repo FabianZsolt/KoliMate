@@ -1,6 +1,10 @@
 using SQLite;
+using System;
+using System.IO;
+using System.Linq;
+using KoliMate.Models;
 
-namespace KoliMate.Pages;
+namespace KoliMate.Views;
 
 public partial class LoginPage : ContentPage
 {
@@ -11,9 +15,6 @@ public partial class LoginPage : ContentPage
     {
         InitializeComponent();
 
-        string dbPath = Path.Combine(FileSystem.AppDataDirectory, "kolimate.db3");
-        _db = new SQLiteConnection(dbPath);
-        _db.CreateTable<User>();
     }
 
     private void OnNextClicked(object sender, EventArgs e)

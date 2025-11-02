@@ -4,30 +4,23 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:KoliMate"
-    xmlns:views="clr-namespace:KoliMate.Views"
+    xmlns:view="clr-namespace:KoliMate.Views"
+
     Title="KoliMate">
 
     <TabBar>
-        <ShellContent Title="Home">
+        <ShellContent 
+            Title="Home"
+            ContentTemplate="{DataTemplate view:SwipePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="🔥" />
             </ShellContent.Icon>
-            <ShellContent.ContentTemplate>
-                <DataTemplate>
-                    <views:SwipePage />
-                </DataTemplate>
-            </ShellContent.ContentTemplate>
         </ShellContent>
 
-        <ShellContent Title="Profile">
+        <ShellContent Title="Profile" ContentTemplate="{DataTemplate view:ProfilePage}">
             <ShellContent.Icon>
                 <FontImageSource Glyph="👤" />
             </ShellContent.Icon>
-            <ShellContent.ContentTemplate>
-                <DataTemplate>
-                    <views:ProfilePage />
-                </DataTemplate>
-            </ShellContent.ContentTemplate>
         </ShellContent>
 
         <ShellContent Title="Matches">
@@ -36,21 +29,22 @@
             </ShellContent.Icon>
             <ShellContent.ContentTemplate>
                 <DataTemplate>
-                    <views:MatchesPage />
+                    <view:MatchesPage />
                 </DataTemplate>
             </ShellContent.ContentTemplate>
         </ShellContent>
 
         <ShellContent Title="Map">
             <ShellContent.Icon>
-                <FontImageSource Glyph="🗺️" />
+                <FontImageSource Glyph="📍" />
             </ShellContent.Icon>
             <ShellContent.ContentTemplate>
                 <DataTemplate>
-                    <views:MapPage />
+                    <view:MapPage />
                 </DataTemplate>
             </ShellContent.ContentTemplate>
         </ShellContent>
+
     </TabBar>
 
 </Shell>

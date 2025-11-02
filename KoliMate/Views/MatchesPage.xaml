@@ -5,7 +5,22 @@
 
     <VerticalStackLayout Padding="20">
         <Label Text="Matches Page" FontSize="24" HorizontalOptions="Center" />
-        <Label Text="Placeholder content for Matches" />
+        <CollectionView ItemsSource="{Binding Users}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="5" Padding="10" BorderColor="#DDD" CornerRadius="8">
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Image Source="{Binding PhotoPath}" WidthRequest="64" HeightRequest="64" Aspect="AspectFill" />
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                <Label Text="{Binding Age, StringFormat='Age: {0}'}" FontSize="12" />
+                                <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 
 </ContentPage>

@@ -21,7 +21,6 @@
             <Label
                 Text="Üdv, ez itt a KoliMate legelső verziója"
                 Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
             <Button
