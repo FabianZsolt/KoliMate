@@ -34,6 +34,9 @@ namespace KoliMate
 
             builder.Services.AddTransient<MatchesPageViewModel>();
 
+            builder.Services.AddTransient<SwipePageViewModel>();
+            builder.Services.AddTransient<SwipePage>();
+
 
             var app = builder.Build();
             Services = app.Services;

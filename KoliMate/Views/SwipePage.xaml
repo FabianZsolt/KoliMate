@@ -1,35 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KoliMate.Views.SwipePage">
+             xmlns:viewmodels="clr-namespace:KoliMate.ViewModels"
+             x:Class="KoliMate.Views.SwipePage"
+             Padding="0">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+    <Grid Padding="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-            <Label
-                Text="KoliMate"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+        <SwipeView Grid.Row="0" Grid.Column="0"
+                   VerticalOptions="Fill"
+                   HorizontalOptions="Fill">
+            <SwipeView.LeftItems>
+                <SwipeItems Mode="Execute">
+                    <SwipeItem Text="Like 👍"
+                               BackgroundColor="LightGreen"
+                               Command="{Binding LikeCommand}" />
+                </SwipeItems>
+            </SwipeView.LeftItems>
 
-            <Label
-                Text="Üdv, ez itt a KoliMate legelső verziója"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+            <SwipeView.RightItems>
+                <SwipeItems Mode="Execute">
+                    <SwipeItem Text="Dislike 👎"
+                               BackgroundColor="LightCoral"
+                               Command="{Binding DislikeCommand}" />
+                </SwipeItems>
+            </SwipeView.RightItems>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Kattints ide!" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
-        </VerticalStackLayout>
-    </ScrollView>
+            <Frame CornerRadius="20" Padding="15" HasShadow="True"
+                   VerticalOptions="Fill"
+                   HorizontalOptions="Fill"
+                   Margin="0">
+                <StackLayout>
+                    <Image Source="{Binding CurrentUser.PhotoPath}"
+                           VerticalOptions="Fill"
+                           HorizontalOptions="Fill"
+                           Aspect="AspectFill"/>
+                    <Label Text="{Binding CurrentUser.Name}" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center"/>
+                    <Label Text="{Binding CurrentUser.Age}" HorizontalOptions="Center"/>
+                    <Label Text="{Binding CurrentUser.Description}" HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
 
+        </SwipeView>
+    </Grid>
 </ContentPage>
