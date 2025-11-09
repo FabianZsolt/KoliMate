@@ -12,6 +12,11 @@ namespace KoliMate.Views
             BindingContext = VM;
         }
 
-        
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (VM.LoadUsersCommand is not null)
+                await VM.LoadUsersCommand.ExecuteAsync(null);
+        }
     }
 }

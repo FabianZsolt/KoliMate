@@ -1,23 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 
 namespace KoliMate.Models
 {
-    public class User
+    [ObservableObject]
+    public partial class User
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Name { get; set; }     
-        public DateTime BirthDate { get; set; }
-        public string Description { get; set; }
-        public string PhotoPath { get; set; } // lokalis fajlpath
-        public string NeptunCode { get; set; } // ha regisztracio Neptun kod alapjan
-        public string Password { get; set; }
-        public bool IsActive { get; set; }
+        [property: PrimaryKey, AutoIncrement]
+        [ObservableProperty]
+        private int id;
+
+        [ObservableProperty]
+        private string name = string.Empty;
+
+        [ObservableProperty]
+        private DateTime birthDate;
+
+        partial void OnBirthDateChanged(DateTime value)
+        {
+            OnPropertyChanged(nameof(Age));
+        }
+
+        [ObservableProperty]
+        private string description = string.Empty;
+
+        [ObservableProperty]
+        private string photoPath = string.Empty; // lokalis fajlpath
+
+        [ObservableProperty]
+        private string neptunCode = string.Empty; // ha regisztracio Neptun kod alapjan
+
+        [ObservableProperty]
+        private string password = string.Empty;
+
+        [ObservableProperty]
+        private bool isActive;
 
         // Computed age based on BirthDate. Ignored by SQLite so it is not persisted.
         [Ignore]

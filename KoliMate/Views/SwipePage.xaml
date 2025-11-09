@@ -1,4 +1,5 @@
-﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:KoliMate.ViewModels"
              x:Class="KoliMate.Views.SwipePage"
@@ -31,10 +32,11 @@
                 </SwipeItems>
             </SwipeView.RightItems>
 
-            <Frame CornerRadius="20" Padding="15" HasShadow="True"
-                   VerticalOptions="Fill"
-                   HorizontalOptions="Fill"
-                   Margin="0">
+            <Border StrokeShape="RoundRectangle 20,20,20,20" Padding="15"
+                    VerticalOptions="Fill"
+                    HorizontalOptions="Fill"
+                    Margin="0"
+                    Background="White">
                 <StackLayout>
                     <Image Source="{Binding CurrentUser.PhotoPath}"
                            VerticalOptions="Fill"
@@ -44,7 +46,7 @@
                     <Label Text="{Binding CurrentUser.Age}" HorizontalOptions="Center"/>
                     <Label Text="{Binding CurrentUser.Description}" HorizontalOptions="Center"/>
                 </StackLayout>
-            </Frame>
+            </Border>
 
         </SwipeView>
     </Grid>

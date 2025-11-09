@@ -4,6 +4,7 @@ using KoliMate.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace KoliMate.ViewModels
 {
@@ -14,34 +15,50 @@ namespace KoliMate.ViewModels
         [ObservableProperty]
         private User currentUser;
 
+        [ObservableProperty]
+        private string noUsersMessage = string.Empty;
+
         private List<User> allUsers;
         private int currentIndex = 0;
+
+        // Prevent concurrent swipe handling which was causing state races and crashes
+        private bool isProcessing;
 
         public SwipePageViewModel(IDatabaseService databaseService)
         {
             _databaseService = databaseService;
+
+            // commands' CanExecute now also checks `isProcessing` to prevent concurrent execution/race conditions
             LoadUsersCommand = new AsyncRelayCommand(LoadUsersAsync);
-            LikeCommand = new AsyncRelayCommand(OnLikeAsync);
-            DislikeCommand = new RelayCommand(OnDislike);
+            LikeCommand = new AsyncRelayCommand(OnLikeAsync, () => CurrentUser != null && !isProcessing);
+            DislikeCommand = new RelayCommand(OnDislike, () => CurrentUser != null && !isProcessing);
         }
 
-        public IAsyncRelayCommand LoadUsersCommand { get; }
-        public IAsyncRelayCommand LikeCommand { get; }
-        public IRelayCommand DislikeCommand { get; }
+        public AsyncRelayCommand LoadUsersCommand { get; }
+        public AsyncRelayCommand LikeCommand { get; }
+        public RelayCommand DislikeCommand { get; }
 
         private int currentUserId = 2; // pl. bejelentkezett felhasználó (később: App.CurrentUser.Id)
 
         private async Task LoadUsersAsync()
         {
+            currentIndex = 0;
             allUsers = await _databaseService.GetUsersAsync();
             // kizárjuk az aktuális felhasználót
             allUsers = allUsers.Where(u => u.Id != currentUserId).ToList();
+
+            if (allUsers == null || allUsers.Count == 0)
+            {
+                CurrentUser = null; // triggers message via OnCurrentUserChanged
+                return;
+            }
+
             LoadNextUser();
         }
 
         private void LoadNextUser()
         {
-            if (currentIndex < allUsers.Count)
+            if (allUsers != null && currentIndex < allUsers.Count)
                 CurrentUser = allUsers[currentIndex++];
             else
                 CurrentUser = null;
@@ -51,37 +68,84 @@ namespace KoliMate.ViewModels
         {
             if (CurrentUser == null) return;
 
-            var existing = (await _databaseService.GetRightSwipesAsync())
-                .FirstOrDefault(s => s.LikerId == CurrentUser.Id && s.LikedId == currentUserId);
+            // guard to avoid concurrent runs (double-tap or rapid swipes)
+            if (isProcessing) return;
+            isProcessing = true;
+            LikeCommand.NotifyCanExecuteChanged();
+            DislikeCommand.NotifyCanExecuteChanged();
 
-            if (existing != null)
+            try
             {
-                existing.IsMatch = true;
-                await _databaseService.UpdateRightSwipeAsync(existing);
+                var swipes = await _databaseService.GetRightSwipesAsync() ?? new List<RightSwipe>();
 
-                await _databaseService.SaveRightSwipeAsync(new RightSwipe
+                // check whether the other user (CurrentUser) already liked the signed-in user
+                var existing = swipes.FirstOrDefault(s => s.LikerId == CurrentUser.Id && s.LikedId == currentUserId);
+
+                if (existing != null)
                 {
-                    LikerId = currentUserId,
-                    LikedId = CurrentUser.Id,
-                    IsMatch = true
-                });
+                    existing.IsMatch = true;
+                    await _databaseService.UpdateRightSwipeAsync(existing);
+
+                    await _databaseService.SaveRightSwipeAsync(new RightSwipe
+                    {
+                        LikerId = currentUserId,
+                        LikedId = CurrentUser.Id,
+                        IsMatch = true,
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+                else
+                {
+                    await _databaseService.SaveRightSwipeAsync(new RightSwipe
+                    {
+                        LikerId = currentUserId,
+                        LikedId = CurrentUser.Id,
+                        IsMatch = false,
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+
+                // advance to next user only after DB work is complete
+                LoadNextUser();
             }
-            else
+            finally
             {
-                await _databaseService.SaveRightSwipeAsync(new RightSwipe
-                {
-                    LikerId = currentUserId,
-                    LikedId = CurrentUser.Id,
-                    IsMatch = false
-                });
+                isProcessing = false;
+                LikeCommand.NotifyCanExecuteChanged();
+                DislikeCommand.NotifyCanExecuteChanged();
             }
-
-            LoadNextUser();
         }
 
         private void OnDislike()
         {
-            LoadNextUser();
+            if (isProcessing) return;
+
+            // mark processing briefly to prevent very fast repeated dislikes
+            isProcessing = true;
+            LikeCommand.NotifyCanExecuteChanged();
+            DislikeCommand.NotifyCanExecuteChanged();
+
+            try
+            {
+                LoadNextUser();
+            }
+            finally
+            {
+                isProcessing = false;
+                LikeCommand.NotifyCanExecuteChanged();
+                DislikeCommand.NotifyCanExecuteChanged();
+            }
+        }
+
+        // Called by the source generator when CurrentUser changes.
+        partial void OnCurrentUserChanged(User value)
+        {
+            // update UI message when no users remain
+            NoUsersMessage = value == null ? "No more users available." : string.Empty;
+
+            // update command availability
+            LikeCommand.NotifyCanExecuteChanged();
+            DislikeCommand.NotifyCanExecuteChanged();
         }
     }
 }

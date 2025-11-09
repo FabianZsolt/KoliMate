@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="KoliMate.Views.ProfilePage"
              Title="Profile">
 
     <ScrollView>
-    <VerticalStackLayout Padding="20" Spacing="12">
-      <Image Source="{Binding CurrentUser.PhotoPath}" HeightRequest="200" Aspect="AspectFill"/>
-      <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" Placeholder="Name" />
-      <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" Placeholder="Neptun code" />
-      <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" MaximumDate="{Binding MaxDate}" Format="d" />
-      <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
-            <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
-            <Button Text="Save" Command="{Binding SaveCommand}" />
-    </VerticalStackLayout>
-  </ScrollView>
-</ContentPage>
+        <VerticalStackLayout Padding="20" Spacing="12">
 
+            <Image Source="{Binding CurrentUser.PhotoPath}" 
+                   HeightRequest="200" 
+                   Aspect="AspectFill"
+                   BackgroundColor="#ddd"/>
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="📸 Kép készítése" Command="{Binding TakePhotoCommand}" />
+                <Button Text="🖼️ Kép kiválasztása" Command="{Binding PickPhotoCommand}" />
+            </HorizontalStackLayout>
+
+            <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" Placeholder="Name" />
+            <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" Placeholder="Neptun code" />
+            <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" MaximumDate="{Binding MaxDate}" Format="d" />
+            <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
+            <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
+            <Button Text="💾 Mentés" Command="{Binding SaveCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
