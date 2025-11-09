@@ -32,20 +32,29 @@
                 </SwipeItems>
             </SwipeView.RightItems>
 
-            <Border StrokeShape="RoundRectangle 20,20,20,20" Padding="15"
+            <Border StrokeShape="RoundRectangle 20,20,20,20" Padding="0"
                     VerticalOptions="Fill"
                     HorizontalOptions="Fill"
                     Margin="0"
                     Background="White">
-                <StackLayout>
-                    <Image Source="{Binding CurrentUser.PhotoPath}"
+                <!-- Use a Grid so the image occupies the top area and the text sits below it in its own row -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Row="0" Source="{Binding CurrentUser.PhotoPath}"
                            VerticalOptions="Fill"
                            HorizontalOptions="Fill"
-                           Aspect="AspectFill"/>
-                    <Label Text="{Binding CurrentUser.Name}" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center"/>
-                    <Label Text="{Binding CurrentUser.Age}" HorizontalOptions="Center"/>
-                    <Label Text="{Binding CurrentUser.Description}" HorizontalOptions="Center"/>
-                </StackLayout>
+                           Aspect="AspectFill" />
+
+                    <StackLayout Grid.Row="1" Padding="15" BackgroundColor="White">
+                        <Label Text="{Binding CurrentUser.Name}" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center" />
+                        <Label Text="{Binding CurrentUser.Age}" HorizontalOptions="Center" />
+                        <Label Text="{Binding CurrentUser.Description}" HorizontalOptions="Center" />
+                    </StackLayout>
+                </Grid>
             </Border>
 
         </SwipeView>

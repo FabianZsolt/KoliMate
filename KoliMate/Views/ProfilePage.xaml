@@ -24,6 +24,9 @@
             <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
             <Button Text="💾 Mentés" Command="{Binding SaveCommand}" />
 
+            <!-- Sign out button -->
+            <Button Text="🔓 Kijelentkezés" Command="{Binding SignOutCommand}" TextColor="White" BackgroundColor="#D9534F" />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

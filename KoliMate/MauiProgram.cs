@@ -3,6 +3,7 @@ using KoliMate.Views;
 using KoliMate.Models;
 using KoliMate.ViewModels;
 using CommunityToolkit.Maui;
+using KoliMate.Services;
 
 
 namespace KoliMate
@@ -26,6 +27,9 @@ namespace KoliMate
             // Dependency injection
             builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
 
+            // register current user service as singleton so every screen can access and modify
+            builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<LoginPageViewModel>();
 
@@ -37,6 +41,8 @@ namespace KoliMate
             builder.Services.AddTransient<SwipePageViewModel>();
             builder.Services.AddTransient<SwipePage>();
 
+            builder.Services.AddSingleton<MatchesPageViewModel>();
+            builder.Services.AddSingleton<MatchesPage>();
 
             var app = builder.Build();
             Services = app.Services;

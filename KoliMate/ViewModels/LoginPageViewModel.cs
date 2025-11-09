@@ -4,16 +4,19 @@ using KoliMate.Models;
 using System.Threading.Tasks;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Storage;
+using KoliMate.Services;
 
 namespace KoliMate.ViewModels
 {
     public partial class LoginPageViewModel : ObservableObject
     {
         private readonly IDatabaseService db;
+        private readonly ICurrentUserService currentUserService;
 
-        public LoginPageViewModel(IDatabaseService db)
+        public LoginPageViewModel(IDatabaseService db, ICurrentUserService currentUserService)
         {
             this.db = db;
+            this.currentUserService = currentUserService;
 
         }
 
@@ -106,6 +109,9 @@ namespace KoliMate.ViewModels
                     Preferences.Set("currentUserNeptun", CurrentUser.NeptunCode ?? string.Empty);
                     // signal AppShell to prompt the user to fill their profile
                     Preferences.Set("ShowProfilePrompt", true);
+
+                    // set global current user
+                    currentUserService.CurrentUser = CurrentUser;
 
                     Application.Current.MainPage = new AppShell();
                 }

@@ -1,34 +1,27 @@
-using KoliMate.ViewModels;
-using KoliMate.Models;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using KoliMate.ViewModels;
 
-namespace KoliMate.Views
+namespace KoliMate.Views;
+
+public partial class MatchesPage : ContentPage
 {
-    public partial class MatchesPage : ContentPage
+    private readonly MatchesPageViewModel viewModel;
+
+    // Parameterless constructor for XAML/DOTNET to instantiate the page
+    // It resolves the view model from the application's service provider.
+    public MatchesPage() : this(MauiProgram.Services.GetRequiredService<MatchesPageViewModel>())
     {
-        private MatchesPageViewModel VM;
+    }
 
+    public MatchesPage(MatchesPageViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = viewModel = vm;
+    }
 
-        // Default constructor required for XAML previewer / Shell instantiation
-        public MatchesPage() : this(App.Current?.Handler?.MauiContext?.Services?.GetService<MatchesPageViewModel>())
-        {
-        }
-
-
-        public MatchesPage(MatchesPageViewModel VM)
-        {
-            InitializeComponent();
-            this.VM = VM;
-            BindingContext = VM;
-        }
-        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-        {
-            base.OnNavigatedTo(args);
-
-            if (BindingContext is MatchesPageViewModel vm)
-                await vm.InitAsync();
-        }
-
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await viewModel.LoadMatchesCommand.ExecuteAsync(null);
     }
 }

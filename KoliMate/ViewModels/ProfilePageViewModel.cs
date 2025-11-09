@@ -6,6 +6,9 @@ using System;
 using Microsoft.Maui.Storage;
 using CommunityToolkit.Maui.Alerts;
 using System.IO;
+using Microsoft.Maui.Controls;
+using KoliMate.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KoliMate.ViewModels
 {
@@ -117,6 +120,31 @@ namespace KoliMate.ViewModels
 
             if (rows > 0)
                 await Snackbar.Make("Profil mentése sikeres.", duration: TimeSpan.FromSeconds(3)).Show();
+        }
+
+        // Sign out with confirmation
+        [RelayCommand]
+        public async Task SignOut()
+        {
+            var page = Application.Current?.MainPage;
+            if (page == null)
+                return;
+
+            bool confirm = await page.DisplayAlert("Kijelentkezés", "Biztosan kijelentkezel?", "Igen", "Mégse");
+            if (!confirm)
+                return;
+
+            // Clear login state
+            Preferences.Set("IsLoggedIn", false);
+            Preferences.Remove("currentUserNeptun");
+            Preferences.Set("ShowProfilePrompt", false);
+
+            // Navigate to LoginPage using DI to resolve the page/viewmodel
+            var serviceProvider = MauiProgram.Services;
+            // Try to resolve the page from DI container; fall back to resolving the view model
+            var loginPage = serviceProvider.GetService<LoginPage>() ?? new LoginPage(serviceProvider.GetRequiredService<LoginPageViewModel>());
+
+            Application.Current.MainPage = loginPage;
         }
     }
 }

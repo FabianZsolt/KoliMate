@@ -1,33 +1,50 @@
-﻿using KoliMate.Models;
-using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using KoliMate.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using KoliMate.Services;
 
 namespace KoliMate.ViewModels
 {
-    public class MatchesPageViewModel
+    public partial class MatchesPageViewModel : ObservableObject
     {
-        private readonly IDatabaseService db;
+        private readonly IDatabaseService databaseService;
+        private readonly ICurrentUserService currentUserService;
 
-        public MatchesPageViewModel(IDatabaseService db)
+        [ObservableProperty]
+        private ObservableCollection<User> matches;
+
+        public MatchesPageViewModel(IDatabaseService databaseService, ICurrentUserService currentUserService)
         {
-            this.db = db;
+            this.databaseService = databaseService;
+            this.currentUserService = currentUserService;
+            Matches = new ObservableCollection<User>();
+            LoadMatchesCommand = new AsyncRelayCommand(LoadMatchesAsync);
         }
 
+        public IAsyncRelayCommand LoadMatchesCommand { get; }
 
-        public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
-
-        public async Task InitAsync()
+        private async Task LoadMatchesAsync()
         {
-            var users = await db.GetUsersAsync();
-            Users.Clear();
-            if (users != null)
+            Matches.Clear();
+
+            var allUsers = await databaseService.GetUsersAsync();
+            var rightSwipes = await databaseService.GetRightSwipesAsync();
+
+            var signedInId = currentUserService.CurrentUser?.Id ?? -1;
+
+            foreach (var user in allUsers)
             {
-                foreach (var u in users)
-                    Users.Add(u);
+                if (user.Id == signedInId)
+                    continue;
+
+                bool userLikedMe = rightSwipes.Any(s => s.LikedId == signedInId && s.LikerId == user.Id);
+                bool iLikedUser = rightSwipes.Any(s => s.LikerId == signedInId && s.LikedId == user.Id);
+
+                if (userLikedMe && iLikedUser)
+                    Matches.Add(user);
             }
         }
     }
