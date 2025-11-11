@@ -3,6 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KoliMate.Views.ProfilePage"
              Title="Profile">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Megosztás" 
+                 IconImageSource="share.png"
+                 Command="{Binding ShareProfileCommand}" 
+                 Priority="0" 
+                 Order="Primary"/>
+    </ContentPage.ToolbarItems>
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="12">

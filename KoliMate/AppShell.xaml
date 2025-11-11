@@ -34,17 +34,6 @@
             </ShellContent.ContentTemplate>
         </ShellContent>
 
-        <ShellContent Title="Térkép">
-            <ShellContent.Icon>
-                <FontImageSource Glyph="📍" />
-            </ShellContent.Icon>
-            <ShellContent.ContentTemplate>
-                <DataTemplate>
-                    <view:MapPage />
-                </DataTemplate>
-            </ShellContent.ContentTemplate>
-        </ShellContent>
-
     </TabBar>
 
 </Shell>

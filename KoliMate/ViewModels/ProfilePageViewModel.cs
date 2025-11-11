@@ -9,6 +9,8 @@ using System.IO;
 using Microsoft.Maui.Controls;
 using KoliMate.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+
 
 namespace KoliMate.ViewModels
 {
@@ -146,5 +148,30 @@ namespace KoliMate.ViewModels
 
             Application.Current.MainPage = loginPage;
         }
+
+
+        [RelayCommand]
+        public async Task ShareProfileAsync()
+        {
+            if (CurrentUser == null)
+            {
+                await Snackbar.Make("Nincs betöltött profil.").Show();
+                return;
+            }
+
+            // Összeállítjuk a megosztandó szöveget
+            string message = $"👤 {CurrentUser.Name}\n" +
+                             $"📘 Neptun: {CurrentUser.NeptunCode}\n" +
+                             $"🎂 Született: {CurrentUser.BirthDate:d}\n" +
+                             $"💬 Rólam: {CurrentUser.Description}";
+
+            // Megosztás
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Text = message,
+                Title = "KoliMate profil megosztása"
+            });
+        }
+
     }
 }

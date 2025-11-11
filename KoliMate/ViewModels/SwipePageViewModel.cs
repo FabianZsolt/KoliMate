@@ -47,7 +47,10 @@ namespace KoliMate.ViewModels
             allUsers = await _databaseService.GetUsersAsync();
             // kizárjuk az aktuális felhasználót
             var signedInId = _currentUserService.CurrentUser?.Id ?? -1;
-            allUsers = allUsers.Where(u => u.Id != signedInId).ToList();
+            var likedSwipes = await _databaseService.GetRightSwipesAsync();
+            likedSwipes = likedSwipes.Where(s => s.LikerId == signedInId).ToList();
+
+            allUsers = allUsers.Where(u => u.Id != signedInId && u.IsActive).ToList();
 
             if (allUsers == null || allUsers.Count == 0)
             {
