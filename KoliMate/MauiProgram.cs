@@ -41,8 +41,16 @@ namespace KoliMate
             builder.Services.AddTransient<SwipePageViewModel>();
             builder.Services.AddTransient<SwipePage>();
 
+            // Matches page and viewmodel as singletons for tab reuse
             builder.Services.AddSingleton<MatchesPageViewModel>();
             builder.Services.AddSingleton<MatchesPage>();
+
+            // Register MatchDetailPage and its ViewModel for DI
+            builder.Services.AddTransient<MatchDetailPage>();
+            builder.Services.AddTransient<MatchDetailViewModel>();
+
+            // Register navigation service
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
 
             var app = builder.Build();
             Services = app.Services;

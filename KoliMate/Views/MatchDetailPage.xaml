@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoliMate.Views.MatchDetailPage"
+             Title="Profile"
+             BackgroundColor="#ffffff">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" IconImageSource="save.png" Priority="0" Order="Primary" Command="{Binding SaveContactCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Image Source="{Binding User.PhotoPath}" HeightRequest="300" Aspect="AspectFill" BackgroundColor="#ddd" />
+
+            <Label Text="{Binding User.Name}" FontAttributes="Bold" FontSize="24" />
+            <Label Text="{Binding User.Description}" FontSize="16" />
+
+            <StackLayout Spacing="8">
+                <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                    <Label Text="Phone:" FontAttributes="Bold" />
+                    <Label Text="{Binding User.PhoneNumber}" x:Name="PhoneLabel" TextColor="Blue" TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenPhoneCommand}" NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Button Text="Copy" Command="{Binding CopyPhoneCommand}" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                    <Label Text="Email:" FontAttributes="Bold" />
+                    <Label Text="{Binding User.Email}" x:Name="EmailLabel" TextColor="Blue" TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenEmailCommand}" NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Button Text="Copy" Command="{Binding CopyEmailCommand}" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                    <Label Text="Link:" FontAttributes="Bold" />
+                    <Label Text="{Binding User.FacebookProfile}" x:Name="LinkLabel" TextColor="Blue" TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenLinkCommand}" NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Button Text="Copy" Command="{Binding CopyLinkCommand}" />
+                </HorizontalStackLayout>
+            </StackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -11,8 +11,8 @@ namespace KoliMate.ViewModels
 {
     public partial class SwipePageViewModel : ObservableObject
     {
-        private readonly IDatabaseService _databaseService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IDatabaseService databaseService;
+        private readonly ICurrentUserService currentUserService;
 
         [ObservableProperty]
         private User currentUser;
@@ -28,8 +28,8 @@ namespace KoliMate.ViewModels
 
         public SwipePageViewModel(IDatabaseService databaseService, ICurrentUserService currentUserService)
         {
-            _databaseService = databaseService;
-            _currentUserService = currentUserService;
+            this.databaseService = databaseService;
+            this.currentUserService = currentUserService;
 
             // commands' CanExecute now also checks `isProcessing` to prevent concurrent execution/race conditions
             LoadUsersCommand = new AsyncRelayCommand(LoadUsersAsync);
@@ -44,13 +44,14 @@ namespace KoliMate.ViewModels
         private async Task LoadUsersAsync()
         {
             currentIndex = 0;
-            allUsers = await _databaseService.GetUsersAsync();
+            allUsers = await databaseService.GetUsersAsync();
             // kizárjuk az aktuális felhasználót
-            var signedInId = _currentUserService.CurrentUser?.Id ?? -1;
-            var likedSwipes = await _databaseService.GetRightSwipesAsync();
-            likedSwipes = likedSwipes.Where(s => s.LikerId == signedInId).ToList();
+            var signedInId = currentUserService.CurrentUser?.Id ?? -1;
+            var likedSwipes = await databaseService.GetRightSwipesAsync();
+            var likedIds = likedSwipes.Where(s => s.LikerId == signedInId).Select(s => s.LikedId).ToHashSet();
 
-            allUsers = allUsers.Where(u => u.Id != signedInId && u.IsActive).ToList();
+            // exclude the current user, inactive users and profiles already liked by the signed-in user
+            allUsers = allUsers.Where(u => u.Id != signedInId && u.IsActive && !likedIds.Contains(u.Id)).ToList();
 
             if (allUsers == null || allUsers.Count == 0)
             {
@@ -81,9 +82,9 @@ namespace KoliMate.ViewModels
 
             try
             {
-                var swipes = await _databaseService.GetRightSwipesAsync() ?? new List<RightSwipe>();
+                var swipes = await databaseService.GetRightSwipesAsync() ?? new List<RightSwipe>();
 
-                var signedInId = _currentUserService.CurrentUser?.Id ?? -1;
+                var signedInId = currentUserService.CurrentUser?.Id ?? -1;
 
                 // check whether the other user (CurrentUser) already liked the signed-in user
                 var existing = swipes.FirstOrDefault(s => s.LikerId == CurrentUser.Id && s.LikedId == signedInId);
@@ -91,9 +92,9 @@ namespace KoliMate.ViewModels
                 if (existing != null)
                 {
                     existing.IsMatch = true;
-                    await _databaseService.UpdateRightSwipeAsync(existing);
+                    await databaseService.UpdateRightSwipeAsync(existing);
 
-                    await _databaseService.SaveRightSwipeAsync(new RightSwipe
+                    await databaseService.SaveRightSwipeAsync(new RightSwipe
                     {
                         LikerId = signedInId,
                         LikedId = CurrentUser.Id,
@@ -103,7 +104,7 @@ namespace KoliMate.ViewModels
                 }
                 else
                 {
-                    await _databaseService.SaveRightSwipeAsync(new RightSwipe
+                    await databaseService.SaveRightSwipeAsync(new RightSwipe
                     {
                         LikerId = signedInId,
                         LikedId = CurrentUser.Id,

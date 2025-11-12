@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using KoliMate.ViewModels;
+using KoliMate.Models;
 
 namespace KoliMate.Views;
 

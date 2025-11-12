@@ -106,12 +106,10 @@ namespace KoliMate.ViewModels
                 {
                     // mark logged in and remember current user neptun so ProfilePage can load it
                     Preferences.Set("IsLoggedIn", true);
-                    Preferences.Set("currentUserNeptun", CurrentUser.NeptunCode ?? string.Empty);
-                    // signal AppShell to prompt the user to fill their profile
                     Preferences.Set("ShowProfilePrompt", true);
 
-                    // set global current user
-                    currentUserService.CurrentUser = CurrentUser;
+                    // set current user via service which will also update the stored preference
+                    await currentUserService.ChangeCurrentUser(CurrentUser.NeptunCode ?? string.Empty);
 
                     Application.Current.MainPage = new AppShell();
                 }

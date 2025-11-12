@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Storage;
 using System.Threading.Tasks;
+using KoliMate.Views;
 
 namespace KoliMate
 {
@@ -10,6 +11,8 @@ namespace KoliMate
         {
             InitializeComponent();
 
+            // Register route for MatchDetailPage so Shell can navigate with query parameters
+            Routing.RegisterRoute(nameof(MatchDetailPage), typeof(MatchDetailPage));
         }
 
         protected override async void OnAppearing()

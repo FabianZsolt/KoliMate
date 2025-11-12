@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KoliMate.Services;
+using System.Linq;
 
 namespace KoliMate.ViewModels
 {
@@ -12,19 +13,23 @@ namespace KoliMate.ViewModels
     {
         private readonly IDatabaseService databaseService;
         private readonly ICurrentUserService currentUserService;
+        private readonly INavigationService navigationService;
 
         [ObservableProperty]
         private ObservableCollection<User> matches;
 
-        public MatchesPageViewModel(IDatabaseService databaseService, ICurrentUserService currentUserService)
+        public MatchesPageViewModel(IDatabaseService databaseService, ICurrentUserService currentUserService, INavigationService navigationService)
         {
             this.databaseService = databaseService;
             this.currentUserService = currentUserService;
+            this.navigationService = navigationService;
             Matches = new ObservableCollection<User>();
             LoadMatchesCommand = new AsyncRelayCommand(LoadMatchesAsync);
+            OpenMatchCommand = new AsyncRelayCommand<User>(OpenMatchAsync);
         }
 
         public IAsyncRelayCommand LoadMatchesCommand { get; }
+        public IAsyncRelayCommand<User> OpenMatchCommand { get; }
 
         private async Task LoadMatchesAsync()
         {
@@ -46,6 +51,14 @@ namespace KoliMate.ViewModels
                 if (userLikedMe && iLikedUser)
                     Matches.Add(user);
             }
+        }
+
+        private async Task OpenMatchAsync(User user)
+        {
+            if (user == null)
+                return;
+
+            await navigationService.NavigateToMatchDetailAsync(user.Id);
         }
     }
 }

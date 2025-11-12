@@ -37,6 +37,16 @@ namespace KoliMate.Models
         [ObservableProperty]
         private bool isActive;
 
+        // New contact fields
+        [ObservableProperty]
+        private string phoneNumber = string.Empty;
+
+        [ObservableProperty]
+        private string email = string.Empty;
+
+        [ObservableProperty]
+        private string facebookProfile = string.Empty;
+
         // Computed age based on BirthDate. Ignored by SQLite so it is not persisted.
         [Ignore]
         public int Age

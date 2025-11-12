@@ -1,4 +1,5 @@
 ﻿using KoliMate.Models;
+using KoliMate.Services;
 using KoliMate.ViewModels;
 using KoliMate.Views;
 
@@ -8,18 +9,23 @@ namespace KoliMate
     {
         private readonly bool isLoggedIn;
 
-        public App(IDatabaseService db)
+        public App(IDatabaseService db, ICurrentUserService currentUserService)
         {
             InitializeComponent();
             Task.Run(async () => await db.InitAsync());
 
             isLoggedIn = Preferences.Get("IsLoggedIn", false);
+            if (isLoggedIn)
+            {
+                Task.Run(async () => await currentUserService.InitializeAsync());
+            }
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
             if (isLoggedIn)
             {
+                
                 return new Window(new AppShell());
             }
             else
