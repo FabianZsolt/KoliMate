@@ -2,93 +2,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KoliMate.Views.ProfilePage"
-             Title="Profil"
-             BackgroundColor="#FAFAFA">
-
+             Title="Profile">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Megosztás" 
-                     IconImageSource="share.png"
-                     Command="{Binding ShareProfileCommand}" 
-                     Priority="0" 
-                     Order="Primary"/>
+                 IconImageSource="share.png"
+                 Command="{Binding ShareProfileCommand}" 
+                 Priority="0" 
+                 Order="Primary"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
+        <VerticalStackLayout Padding="20" Spacing="12">
 
-            <!-- Profilkép -->
-            <Frame Padding="0"
-                   HeightRequest="180"
-                   WidthRequest="180"
-                   CornerRadius="90"
-                   HasShadow="True"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   BackgroundColor="#E0E0E0">
-                <Image Source="{Binding CurrentUser.PhotoPath}" 
-                       Aspect="AspectFill" />
-            </Frame>
+            <Image Source="{Binding CurrentUser.PhotoPath}" 
+                   HeightRequest="200" 
+                   Aspect="AspectFill"
+                   BackgroundColor="#ddd"/>
 
-            <!-- Kép gombok -->
-            <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
-                <Button Text="📸 Kép készítése" 
-                        Command="{Binding TakePhotoCommand}" 
-                        CornerRadius="12"
-                        BackgroundColor="#007ACC"
-                        TextColor="White"
-                        Padding="12,8"/>
-                <Button Text="🖼️ Kép kiválasztása" 
-                        Command="{Binding PickPhotoCommand}" 
-                        CornerRadius="12"
-                        BackgroundColor="#007ACC"
-                        TextColor="White"
-                        Padding="12,8"/>
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="📸 Kép készítése" Command="{Binding TakePhotoCommand}" />
+                <Button Text="🖼️ Kép kiválasztása" Command="{Binding PickPhotoCommand}" />
             </HorizontalStackLayout>
 
-            <!-- Adatmezők -->
-            <Frame CornerRadius="12" BackgroundColor="White" HasShadow="True" Padding="12">
-                <VerticalStackLayout Spacing="14">
-                    <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" 
-                           Placeholder="Név" />
-                    <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" 
-                           Placeholder="Neptun kód" />
-                    <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" 
-                                MaximumDate="{Binding MaxDate}" 
-                                Format="d" />
-                    <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" 
-                            HeightRequest="100" 
-                            Placeholder="Bemutatkozás" />
+            <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" Placeholder="Name" />
+            <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" Placeholder="Neptun code" />
+            <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" MaximumDate="{Binding MaxDate}" Format="d" />
+            <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
 
-                    <!-- Kapcsolati adatok -->
-                    <Entry Text="{Binding CurrentUser.PhoneNumber, Mode=TwoWay}" 
-                           Placeholder="Telefonszám" 
-                           Keyboard="Telephone" />
-                    <Entry Text="{Binding CurrentUser.Email, Mode=TwoWay}" 
-                           Placeholder="Email cím" 
-                           Keyboard="Email" />
-                    <Entry Text="{Binding CurrentUser.FacebookProfile, Mode=TwoWay}" 
-                           Placeholder="Facebook profil URL" />
+            <!-- New contact fields -->
+            <Entry Text="{Binding CurrentUser.PhoneNumber, Mode=TwoWay}" Placeholder="Phone number" Keyboard="Telephone" />
+            <Entry Text="{Binding CurrentUser.Email, Mode=TwoWay}" Placeholder="Email address" Keyboard="Email" />
+            <Entry Text="{Binding CurrentUser.FacebookProfile, Mode=TwoWay}" Placeholder="Facebook profile URL or username" />
 
-                    <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" 
-                           Placeholder="Jelszó" 
-                           IsPassword="True"/>
-                </VerticalStackLayout>
-            </Frame>
+            <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
+            <Button Text="💾 Mentés" Command="{Binding SaveCommand}" />
 
-            <!-- Műveleti gombok -->
-            <Button Text="💾 Mentés" 
-                    Command="{Binding SaveCommand}" 
-                    CornerRadius="12"
-                    BackgroundColor="#28A745" 
-                    TextColor="White"
-                    HeightRequest="50"/>
-
-            <Button Text="🔓 Kijelentkezés" 
-                    Command="{Binding SignOutCommand}" 
-                    CornerRadius="12"
-                    BackgroundColor="#D9534F" 
-                    TextColor="White"
-                    HeightRequest="50"/>
+            <!-- Sign out button -->
+            <Button Text="🔓 Kijelentkezés" Command="{Binding SignOutCommand}" TextColor="White" BackgroundColor="#D9534F" />
 
         </VerticalStackLayout>
     </ScrollView>
