@@ -1,26 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:KoliMate.ViewModels"
              x:Class="KoliMate.Views.LoginPage"
-             Title="Bejelentkezés">
+             Title="Bejelentkezés"
+             BackgroundColor="#FAFAFA">
 
-  <VerticalStackLayout Padding="30" Spacing="20">
-    <Label Text="Neptun-kód:" FontSize="18"/>
-    <Entry x:Name="NeptunEntry" Placeholder="pl. ABC123" Text="{Binding NeptunEntryText}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="24" HorizontalOptions="FillAndExpand">
 
-    <Button x:Name="NextButton"
-            Text="Tovább"
-            Command="{Binding NextButtonCommand}"
-            IsVisible="{Binding NextButtonVisible}"/>
+            <Label Text="Bejelentkezés" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   TextColor="#333333"
+                   HorizontalOptions="Center"/>
 
-    <!-- Ezeket dinamikusan fogjuk mutatni -->
-    <StackLayout x:Name="PasswordPanel" IsVisible="{Binding PasswordEntryVisible}">
-      <Label x:Name="PasswordLabel" FontSize="18" Text="{Binding PasswordLabel}"/>
-      <Entry x:Name="PasswordEntry" IsPassword="True" Placeholder="Jelszó" Text="{Binding PasswordEntryText}" />
-      <Entry x:Name="ConfirmEntry" IsPassword="True" Placeholder="Jelszó megerősítése" IsVisible="{Binding ConfirmEntryVisible}" Text="{Binding ConfirmEntryText}" />
-      <Button Text="Belépés / Mentés" Command="{Binding PasswordSubmitCommand}"/>
-    </StackLayout>
+            <!-- Neptun kód panel -->
+            <Frame BackgroundColor="White" CornerRadius="12" Padding="12" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Neptun-kód:" FontSize="18" TextColor="#333"/>
+                    <!-- Wrapped Entry in Frame to achieve rounded background -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="8" Padding="6" HasShadow="False">
+                        <Entry x:Name="NeptunEntry" 
+                               Placeholder="pl. ABC123" 
+                               Text="{Binding NeptunEntryText}" 
+                               BackgroundColor="Transparent" 
+                               TextColor="#333" 
+                               HeightRequest="44"
+                               HorizontalOptions="FillAndExpand"/>
+                    </Frame>
+                    <Button x:Name="NextButton"
+                            Text="Tovább"
+                            Command="{Binding NextButtonCommand}"
+                            IsVisible="{Binding NextButtonVisible}"
+                            BackgroundColor="#007ACC"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="44"/>
+                </VerticalStackLayout>
+            </Frame>
 
-    <Label x:Name="MessageLabel" TextColor="{Binding MessageTextColor}" FontSize="14" Text="{Binding MessageText}" />
-  </VerticalStackLayout>
+            <!-- Jelszó panel -->
+            <Frame BackgroundColor="White" CornerRadius="12" Padding="12" HasShadow="True" IsVisible="{Binding PasswordEntryVisible}">
+                <VerticalStackLayout Spacing="12">
+                    <Label x:Name="PasswordLabel" 
+                           FontSize="18" 
+                           Text="{Binding PasswordLabel}" 
+                           TextColor="#333"/>
+                    <!-- Password Entry wrapped -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="8" Padding="6" HasShadow="False">
+                        <Entry x:Name="PasswordEntry" 
+                               IsPassword="True" 
+                               Placeholder="Jelszó" 
+                               Text="{Binding PasswordEntryText}" 
+                               BackgroundColor="Transparent"
+                               TextColor="#333" 
+                               HeightRequest="44"/>
+                    </Frame>
+                    <!-- Confirm Entry wrapped -->
+                    <Frame BackgroundColor="#F5F5F5" CornerRadius="8" Padding="6" HasShadow="False" IsVisible="{Binding ConfirmEntryVisible}">
+                        <Entry x:Name="ConfirmEntry" 
+                               IsPassword="True" 
+                               Placeholder="Jelszó megerősítése" 
+                               Text="{Binding ConfirmEntryText}" 
+                               BackgroundColor="Transparent"
+                               TextColor="#333"
+                               HeightRequest="44"/>
+                    </Frame>
+                    <Button Text="Belépés / Mentés" 
+                            Command="{Binding PasswordSubmitCommand}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="44"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Üzenet label -->
+            <Label x:Name="MessageLabel" 
+                   TextColor="{Binding MessageTextColor}" 
+                   FontSize="14" 
+                   Text="{Binding MessageText}" 
+                   HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

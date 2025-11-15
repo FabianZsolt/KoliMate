@@ -2,43 +2,106 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KoliMate.Views.ProfilePage"
-             Title="Profile">
+             Title="Profil"
+             BackgroundColor="#FAFAFA">
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Megosztás" 
-                 IconImageSource="share.png"
-                 Command="{Binding ShareProfileCommand}" 
-                 Priority="0" 
-                 Order="Primary"/>
+                     IconImageSource="share.png"
+                     Command="{Binding ShareProfileCommand}" 
+                     Priority="0" 
+                     Order="Primary"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
+        <VerticalStackLayout Padding="24" Spacing="20">
 
-            <Image Source="{Binding CurrentUser.PhotoPath}" 
-                   HeightRequest="200" 
-                   Aspect="AspectFill"
-                   BackgroundColor="#ddd"/>
+            <!-- Profilkép -->
+            <Frame Padding="0"
+                   HeightRequest="180"
+                   WidthRequest="180"
+                   CornerRadius="90"
+                   HasShadow="True"
+                   HorizontalOptions="Center"
+                   BackgroundColor="#E0E0E0">
+                <Image Source="{Binding CurrentUser.PhotoPath}" 
+                       Aspect="AspectFill" />
+            </Frame>
 
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="📸 Kép készítése" Command="{Binding TakePhotoCommand}" />
-                <Button Text="🖼️ Kép kiválasztása" Command="{Binding PickPhotoCommand}" />
+            <!-- Név, Neptun kód és születési dátum stílusosan -->
+            <Frame CornerRadius="12" BackgroundColor="White" HasShadow="True" Padding="16" HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+
+                    <Label Text="{Binding CurrentUser.Name}" 
+                           FontAttributes="Bold" 
+                           FontSize="22" 
+                           HorizontalOptions="Center"/>
+
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="Neptun kód:" FontAttributes="Bold"/>
+                        <Label Text="{Binding CurrentUser.NeptunCode}"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="Születési dátum:" FontAttributes="Bold"/>
+                        <Label Text="{Binding BirthDate, StringFormat='{}{0:d}'}"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Kép gombok -->
+            <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
+                <Button Text="📸 Kép készítése" 
+                        Command="{Binding TakePhotoCommand}" 
+                        CornerRadius="12"
+                        BackgroundColor="#007ACC"
+                        TextColor="White"
+                        Padding="12,8"/>
+                <Button Text="🖼️ Kép kiválasztása" 
+                        Command="{Binding PickPhotoCommand}" 
+                        CornerRadius="12"
+                        BackgroundColor="#007ACC"
+                        TextColor="White"
+                        Padding="12,8"/>
             </HorizontalStackLayout>
 
-            <Entry Text="{Binding CurrentUser.Name, Mode=TwoWay}" Placeholder="Name" />
-            <Entry Text="{Binding CurrentUser.NeptunCode, Mode=TwoWay}" Placeholder="Neptun code" />
-            <DatePicker Date="{Binding BirthDate, Mode=TwoWay}" MaximumDate="{Binding MaxDate}" Format="d" />
-            <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" HeightRequest="120" />
+            <!-- Szerkeszthető adatok -->
+            <Frame CornerRadius="12" BackgroundColor="White" HasShadow="True" Padding="12">
+                <VerticalStackLayout Spacing="14">
+                    <Editor Text="{Binding CurrentUser.Description, Mode=TwoWay}" 
+                            HeightRequest="100" 
+                            Placeholder="Bemutatkozás" />
 
-            <!-- New contact fields -->
-            <Entry Text="{Binding CurrentUser.PhoneNumber, Mode=TwoWay}" Placeholder="Phone number" Keyboard="Telephone" />
-            <Entry Text="{Binding CurrentUser.Email, Mode=TwoWay}" Placeholder="Email address" Keyboard="Email" />
-            <Entry Text="{Binding CurrentUser.FacebookProfile, Mode=TwoWay}" Placeholder="Facebook profile URL or username" />
+                    <Entry Text="{Binding CurrentUser.PhoneNumber, Mode=TwoWay}" 
+                           Placeholder="Telefonszám" 
+                           Keyboard="Telephone" />
+                    <Entry Text="{Binding CurrentUser.Email, Mode=TwoWay}" 
+                           Placeholder="Email cím" 
+                           Keyboard="Email" />
+                    <Entry Text="{Binding CurrentUser.FacebookProfile, Mode=TwoWay}" 
+                           Placeholder="Facebook profil URL" />
 
-            <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True" />
-            <Button Text="💾 Mentés" Command="{Binding SaveCommand}" />
+                    <Entry Text="{Binding CurrentUser.Password, Mode=TwoWay}" 
+                           Placeholder="Jelszó" 
+                           IsPassword="True"/>
+                </VerticalStackLayout>
+            </Frame>
 
-            <!-- Sign out button -->
-            <Button Text="🔓 Kijelentkezés" Command="{Binding SignOutCommand}" TextColor="White" BackgroundColor="#D9534F" />
+            <!-- Műveleti gombok -->
+            <Button Text="💾 Mentés" 
+                    Command="{Binding SaveCommand}" 
+                    CornerRadius="12"
+                    BackgroundColor="#28A745" 
+                    TextColor="White"
+                    HeightRequest="50"/>
+
+            <Button Text="🔓 Kijelentkezés" 
+                    Command="{Binding SignOutCommand}" 
+                    CornerRadius="12"
+                    BackgroundColor="#D9534F" 
+                    TextColor="White"
+                    HeightRequest="50"/>
 
         </VerticalStackLayout>
     </ScrollView>
