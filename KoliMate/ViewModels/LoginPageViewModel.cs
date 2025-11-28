@@ -53,7 +53,6 @@ namespace KoliMate.ViewModels
         [RelayCommand]
         public async Task NextButton()
         {
-            // Use the generated properties (PascalCase) so change notifications fire
             MessageText = "";
             string neptun = NeptunEntryText?.Trim().ToUpper();
 
@@ -101,14 +100,11 @@ namespace KoliMate.ViewModels
 
             if (CurrentUser.IsActive)
             {
-                // Bejelentkezés
                 if (pwd == CurrentUser.Password)
                 {
-                    // mark logged in and remember current user neptun so ProfilePage can load it
                     Preferences.Set("IsLoggedIn", true);
                     Preferences.Set("ShowProfilePrompt", true);
 
-                    // set current user via service which will also update the stored preference
                     await currentUserService.ChangeCurrentUser(CurrentUser.NeptunCode ?? string.Empty);
 
                     Application.Current.MainPage = new AppShell();

@@ -52,13 +52,13 @@
 
             <!-- Kép gombok -->
             <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
-                <Button Text="📸 Kép készítése" 
+                <Button Text="Kép készítése" 
                         Command="{Binding TakePhotoCommand}" 
                         CornerRadius="12"
                         BackgroundColor="#007ACC"
                         TextColor="White"
                         Padding="12,8"/>
-                <Button Text="🖼️ Kép kiválasztása" 
+                <Button Text="Kép kiválasztása" 
                         Command="{Binding PickPhotoCommand}" 
                         CornerRadius="12"
                         BackgroundColor="#007ACC"

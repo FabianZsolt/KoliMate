@@ -96,7 +96,7 @@ namespace KoliMate.ViewModels
             }
             catch (Exception)
             {
-                // swallow or log; UI can show errors if needed
+                
             }
         }
 

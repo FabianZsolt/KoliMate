@@ -37,7 +37,6 @@
                     HorizontalOptions="Fill"
                     Margin="0"
                     Background="White">
-                <!-- Use a Grid so the image occupies the top area and the text sits below it in its own row -->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

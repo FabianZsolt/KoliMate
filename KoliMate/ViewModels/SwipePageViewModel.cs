@@ -23,7 +23,7 @@ namespace KoliMate.ViewModels
         private List<User> allUsers;
         private int currentIndex = 0;
 
-        // Prevent concurrent swipe handling which was causing state races and crashes
+        // ez a változó nem engedi meg, hogy a Like vagy Dislike művelet egyszerre többször fusson
         private bool isProcessing;
 
         public SwipePageViewModel(IDatabaseService databaseService, ICurrentUserService currentUserService)
@@ -31,7 +31,6 @@ namespace KoliMate.ViewModels
             this.databaseService = databaseService;
             this.currentUserService = currentUserService;
 
-            // commands' CanExecute now also checks `isProcessing` to prevent concurrent execution/race conditions
             LoadUsersCommand = new AsyncRelayCommand(LoadUsersAsync);
             LikeCommand = new AsyncRelayCommand(OnLikeAsync, () => CurrentUser != null && !isProcessing);
             DislikeCommand = new RelayCommand(OnDislike, () => CurrentUser != null && !isProcessing);
@@ -50,12 +49,11 @@ namespace KoliMate.ViewModels
             var likedSwipes = await databaseService.GetRightSwipesAsync();
             var likedIds = likedSwipes.Where(s => s.LikerId == signedInId).Select(s => s.LikedId).ToHashSet();
 
-            // exclude the current user, inactive users and profiles already liked by the signed-in user
             allUsers = allUsers.Where(u => u.Id != signedInId && u.IsActive && !likedIds.Contains(u.Id)).ToList();
 
             if (allUsers == null || allUsers.Count == 0)
             {
-                CurrentUser = null; // triggers message via OnCurrentUserChanged
+                CurrentUser = null; 
                 return;
             }
 
@@ -74,7 +72,6 @@ namespace KoliMate.ViewModels
         {
             if (CurrentUser == null) return;
 
-            // guard to avoid concurrent runs (double-tap or rapid swipes)
             if (isProcessing) return;
             isProcessing = true;
             LikeCommand.NotifyCanExecuteChanged();
@@ -86,7 +83,7 @@ namespace KoliMate.ViewModels
 
                 var signedInId = currentUserService.CurrentUser?.Id ?? -1;
 
-                // check whether the other user (CurrentUser) already liked the signed-in user
+                // megnézzük, hogy a másik fél már like-olt-e minket
                 var existing = swipes.FirstOrDefault(s => s.LikerId == CurrentUser.Id && s.LikedId == signedInId);
 
                 if (existing != null)
@@ -113,7 +110,7 @@ namespace KoliMate.ViewModels
                     });
                 }
 
-                // advance to next user only after DB work is complete
+                // tovább lépünk a következő felhasználóra
                 LoadNextUser();
             }
             finally
@@ -128,7 +125,6 @@ namespace KoliMate.ViewModels
         {
             if (isProcessing) return;
 
-            // mark processing briefly to prevent very fast repeated dislikes
             isProcessing = true;
             LikeCommand.NotifyCanExecuteChanged();
             DislikeCommand.NotifyCanExecuteChanged();
@@ -145,13 +141,11 @@ namespace KoliMate.ViewModels
             }
         }
 
-        // Called by the source generator when CurrentUser changes.
         partial void OnCurrentUserChanged(User value)
         {
-            // update UI message when no users remain
+            // jelezzük, ha elfogytak a felhasználók
             NoUsersMessage = value == null ? "No more users available." : string.Empty;
 
-            // update command availability
             LikeCommand.NotifyCanExecuteChanged();
             DislikeCommand.NotifyCanExecuteChanged();
         }

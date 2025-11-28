@@ -57,7 +57,6 @@ namespace KoliMate.ViewModels
                 CurrentUser.BirthDate = value;
         }
 
-        //  Kép kiválasztása galériából
         [RelayCommand]
         public async Task PickPhotoAsync()
         {
@@ -81,7 +80,6 @@ namespace KoliMate.ViewModels
             }
         }
 
-        // Saját fotó készítése
         [RelayCommand]
         public async Task TakePhotoAsync()
         {
@@ -111,7 +109,6 @@ namespace KoliMate.ViewModels
             }
         }
 
-        // Mentés
         [RelayCommand]
         public async Task Save()
         {
@@ -124,7 +121,6 @@ namespace KoliMate.ViewModels
                 await Snackbar.Make("Profil mentése sikeres.", duration: TimeSpan.FromSeconds(3)).Show();
         }
 
-        // Sign out with confirmation
         [RelayCommand]
         public async Task SignOut()
         {
@@ -136,14 +132,12 @@ namespace KoliMate.ViewModels
             if (!confirm)
                 return;
 
-            // Clear login state
             Preferences.Set("IsLoggedIn", false);
             Preferences.Remove("currentUserNeptun");
             Preferences.Set("ShowProfilePrompt", false);
 
             // Navigate to LoginPage using DI to resolve the page/viewmodel
             var serviceProvider = MauiProgram.Services;
-            // Try to resolve the page from DI container; fall back to resolving the view model
             var loginPage = serviceProvider.GetService<LoginPage>() ?? new LoginPage(serviceProvider.GetRequiredService<LoginPageViewModel>());
 
             Application.Current.MainPage = loginPage;
@@ -160,9 +154,9 @@ namespace KoliMate.ViewModels
             }
 
             // Összeállítjuk a megosztandó szöveget
-            string message = $"👤 {CurrentUser.Name}\n" +
-                             $"📘 Neptun: {CurrentUser.NeptunCode}\n" +
-                             $"🎂 Született: {CurrentUser.BirthDate:d}\n" +
+            string message = "Én már regisztráltam a KoliMate-re!" +
+                             $"👤 {CurrentUser.Name}\n" +
+                             $"🎂 Születési dátum: {CurrentUser.BirthDate:d}\n" +
                              $"💬 Rólam: {CurrentUser.Description}";
 
             // Megosztás
